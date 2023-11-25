@@ -1,6 +1,10 @@
 //SZYFR CEZARA
 const alfabet = 'aąbcćdeęfghijklłmnńoóprsśtuwyzźżAĄBCĆDEĘFGHIJKLŁMNŃOÓPRSŚTUWYZŹŻ';
 
+function modulo(a, b) {
+    return ((a % b) + b) % b;
+}
+
 function szyfrCezara(tekst, przesuniecie) {
     let zaszyfrowanyTekst = '';
 
@@ -11,7 +15,7 @@ function szyfrCezara(tekst, przesuniecie) {
         if (indeks === -1) {
             zaszyfrowanyTekst += litera;
         } else {
-            const nowyIndeks = (indeks + przesuniecie) % alfabet.length;
+            const nowyIndeks = modulo((indeks + przesuniecie), alfabet.length);
             zaszyfrowanyTekst += alfabet[nowyIndeks];
         }
     }
@@ -31,25 +35,27 @@ function decodeCezar() {
     const przesuniecie = parseInt(document.getElementById('cezarShift').value) || 3;
     const odszyfrowanyTekst = szyfrCezara(tekst, -przesuniecie);
     document.getElementById('outputText').value = odszyfrowanyTekst;
-};
+}
 
 //SZYFR POLIBIUSZA
 function encodePolibiusz() {
     let inputText = document.getElementById("inputText").value.toUpperCase();
     let polibiuszMap = {
-        'A': '11', 'B': '12', 'C': '13', 'D': '14', 'E': '15',
-        'F': '21', 'G': '22', 'H': '23', 'I': '24', 'J': '25',
-        'K': '31', 'L': '32', 'M': '33', 'N': '34', 'O': '35',
-        'P': '41', 'Q': '42', 'R': '43', 'S': '44', 'T': '45',
-        'U': '51', 'V': '52', 'W': '53', 'X': '54', 'Y': '55',
-        'Z': '61',
+        'A': '11', 'Ą': '12', 'B': '13', 'C': '14', 'Ć': '15',
+        'D': '21', 'E': '22', 'Ę': '23', 'F': '24', 'G': '25',
+        'H': '31', 'I': '32', 'J': '33', 'K': '34', 'L': '35',
+        'Ł': '41', 'M': '42', 'N': '43', 'Ń': '44', 'O': '45',
+        'Ó': '51', 'P': '52', 'Q': '53', 'R': '54', 'S': '55',
+        'Ś': '61', 'T': '62', 'U': '63', 'V': '64', 'W': '65',
+        'X': '71', 'Y': '72', 'Z': '73', 'Ź': '74', 'Ż': '75',
+        ' ': '88',
     };
     let result = "";
     for (let i = 0; i < inputText.length; i++) {
         let char = inputText[i];
         if (polibiuszMap[char]) {
             result += polibiuszMap[char];
-        } else if (char !== ' ') {
+        } else {
             result += char;
         }
     }
@@ -59,12 +65,14 @@ function encodePolibiusz() {
 function decodePolibiusz() {
     let inputText = document.getElementById("inputText").value;
     let polibiuszMap = {
-        '11': 'A', '12': 'B', '13': 'C', '14': 'D', '15': 'E',
-        '21': 'F', '22': 'G', '23': 'H', '24': 'I', '25': 'J',
-        '31': 'K', '32': 'L', '33': 'M', '34': 'N', '35': 'O',
-        '41': 'P', '42': 'Q', '43': 'R', '44': 'S', '45': 'T',
-        '51': 'U', '52': 'V', '53': 'W', '54': 'X', '55': 'Y',
-        '61': 'Z',
+        '11': 'A', '12': 'Ą', '13': 'B', '14': 'C', '15': 'Ć',
+        '21': 'D', '22': 'E', '23': 'Ę', '24': 'F', '25': 'G',
+        '31': 'H', '32': 'I', '33': 'J', '34': 'K', '35': 'L',
+        '41': 'Ł', '42': 'M', '43': 'N', '44': 'Ń', '45': 'O',
+        '51': 'Ó', '52': 'P', '53': 'Q', '54': 'R', '55': 'S',
+        '61': 'Ś', '62': 'T', '63': 'U', '64': 'V', '65': 'W',
+        '71': 'X', '72': 'Y', '73': 'Z', '74': 'Ź', '75': 'Ż',
+        '88': ' ',
     };
     let result = "";
     for (let i = 0; i < inputText.length; i += 2) {
@@ -72,41 +80,51 @@ function decodePolibiusz() {
         if (polibiuszMap[pair]) {
             result += polibiuszMap[pair];
         } else if (pair.trim() !== '') {
-            result += pair;
+            result += pair;  // If not found in the map, add the original pair
         }
     }
     document.getElementById("outputText").value = result;
 }
+
 //SZYFR HOMOFONICZNY
 function encodeHomofoniczny() {
     let inputText = document.getElementById("inputText").value.toUpperCase();
     let homophonicMap = {
         'A': ['11', '21', '31'],
-        'B': ['12', '22', '32'],
-        'C': ['13', '23', '33'],
-        'D': ['14', '24', '34'],
-        'E': ['15', '25', '35'],
-        'F': ['16', '26', '36'],
-        'G': ['17', '27', '37'],
-        'H': ['18', '28', '38'],
-        'I': ['19', '29', '39'],
-        'J': ['10', '20', '30'],
-        'K': ['41', '51', '61'],
-        'L': ['42', '52', '62'],
-        'M': ['43', '53', '63'],
-        'N': ['44', '54', '64'],
-        'O': ['45', '55', '65'],
-        'P': ['46', '56', '66'],
-        'Q': ['47', '57', '67'],
-        'R': ['48', '58', '68'],
-        'S': ['49', '59', '69'],
-        'T': ['40', '50', '60'],
-        'U': ['71', '81', '91'],
-        'V': ['72', '82', '92'],
-        'W': ['73', '83', '93'],
-        'X': ['74', '84', '94'],
-        'Y': ['75', '85', '95'],
-        'Z': ['76', '86', '96'],
+        'Ą': ['12', '22', '32'],
+        'B': ['13', '23', '33'],
+        'C': ['14', '24', '34'],
+        'Ć': ['15', '25', '35'],
+        'D': ['16', '26', '36'],
+        'E': ['17', '27', '37'],
+        'Ę': ['18', '28', '38'],
+        'F': ['19', '29', '39'],
+        'G': ['10', '20', '30'],
+        'H': ['41', '51', '61'],
+        'I': ['42', '52', '62'],
+        'J': ['43', '53', '63'],
+        'K': ['44', '54', '64'],
+        'L': ['45', '55', '65'],
+        'Ł': ['46', '56', '66'],
+        'M': ['47', '57', '67'],
+        'N': ['48', '58', '68'],
+        'Ń': ['49', '59', '69'],
+        'O': ['40', '50', '60'],
+        'Ó': ['71', '81', '91'],
+        'P': ['72', '82', '92'],
+        'Q': ['73', '83', '93'],
+        'R': ['74', '84', '94'],
+        'S': ['75', '85', '95'],
+        'Ś': ['76', '86', '96'],
+        'T': ['77', '87', '97'],
+        'U': ['78', '88', '98'],
+        'V': ['79', '89', '99'],
+        'W': ['70', '80', '90'],
+        'X': ['01', '02', '03'],
+        'Y': ['04', '05', '06'],
+        'Z': ['07', '08', '09'],
+        'Ż': ['00', '10', '20'],
+        'Ź': ['31', '41', '51'],
     };
     let result = "";
     for (let i = 0; i < inputText.length; i++) {
@@ -114,7 +132,7 @@ function encodeHomofoniczny() {
         if (homophonicMap[char]) {
             let randomIndex = Math.floor(Math.random() * homophonicMap[char].length);
             result += homophonicMap[char][randomIndex] + ' ';
-        } else {
+        } else if (char !== ' ') {
             result += char + ' ';
         }
     }
@@ -125,31 +143,40 @@ function decodeHomofoniczny() {
     let inputText = document.getElementById("inputText").value;
     let homophonicMap = {
         '11': 'A', '21': 'A', '31': 'A',
-        '12': 'B', '22': 'B', '32': 'B',
-        '13': 'C', '23': 'C', '33': 'C',
-        '14': 'D', '24': 'D', '34': 'D',
-        '15': 'E', '25': 'E', '35': 'E',
-        '16': 'F', '26': 'F', '36': 'F',
-        '17': 'G', '27': 'G', '37': 'G',
-        '18': 'H', '28': 'H', '38': 'H',
-        '19': 'I', '29': 'I', '39': 'I',
-        '10': 'J', '20': 'J', '30': 'J',
-        '41': 'K', '51': 'K', '61': 'K',
-        '42': 'L', '52': 'L', '62': 'L',
-        '43': 'M', '53': 'M', '63': 'M',
-        '44': 'N', '54': 'N', '64': 'N',
-        '45': 'O', '55': 'O', '65': 'O',
-        '46': 'P', '56': 'P', '66': 'P',
-        '47': 'Q', '57': 'Q', '67': 'Q',
-        '48': 'R', '58': 'R', '68': 'R',
-        '49': 'S', '59': 'S', '69': 'S',
-        '40': 'T', '50': 'T', '60': 'T',
-        '71': 'U', '81': 'U', '91': 'U',
-        '72': 'V', '82': 'V', '92': 'V',
-        '73': 'W', '83': 'W', '93': 'W',
-        '74': 'X', '84': 'X', '94': 'X',
-        '75': 'Y', '85': 'Y', '95': 'Y',
-        '76': 'Z', '86': 'Z', '96': 'Z',
+        '12': 'Ą', '22': 'Ą', '32': 'Ą',
+        '13': 'B', '23': 'B', '33': 'B',
+        '14': 'C', '24': 'C', '34': 'C',
+        '15': 'Ć', '25': 'Ć', '35': 'Ć',
+        '16': 'D', '26': 'D', '36': 'D',
+        '17': 'E', '27': 'E', '37': 'E',
+        '18': 'Ę', '28': 'Ę', '38': 'Ę',
+        '19': 'F', '29': 'F', '39': 'F',
+        '10': 'G', '20': 'G', '30': 'G',
+        '41': 'H', '51': 'H', '61': 'H',
+        '42': 'I', '52': 'I', '62': 'I',
+        '43': 'J', '53': 'J', '63': 'J',
+        '44': 'K', '54': 'K', '64': 'K',
+        '45': 'L', '55': 'L', '65': 'L',
+        '46': 'Ł', '56': 'Ł', '66': 'Ł',
+        '47': 'M', '57': 'M', '67': 'M',
+        '48': 'N', '58': 'N', '68': 'N',
+        '49': 'Ń', '59': 'Ń', '69': 'Ń',
+        '40': 'O', '50': 'O', '60': 'O',
+        '71': 'Ó', '81': 'Ó', '91': 'Ó',
+        '72': 'P', '82': 'P', '92': 'P',
+        '73': 'Q', '83': 'Q', '93': 'Q',
+        '74': 'R', '84': 'R', '94': 'R',
+        '75': 'S', '85': 'S', '95': 'S',
+        '76': 'Ś', '86': 'Ś', '96': 'Ś',
+        '77': 'T', '87': 'T', '97': 'T',
+        '78': 'U', '88': 'U', '98': 'U',
+        '79': 'V', '89': 'V', '99': 'V',
+        '70': 'W', '80': 'W', '90': 'W',
+        '01': 'X', '02': 'X', '03': 'X',
+        '04': 'Y', '05': 'Y', '06': 'Y',
+        '07': 'Z', '08': 'Z', '09': 'Z',
+        '00': 'Ż', '10': 'Ż', '20': 'Ż',
+        '31': 'Ź', '41': 'Ź', '51': 'Ź',
     };
     let result = "";
     let tokens = inputText.split(' ');
@@ -164,14 +191,19 @@ function decodeHomofoniczny() {
 }
 
 //SZYFR TRITEMIUSZ
+function modulo(n, m) {
+    return ((n % m) + m) % m;
+}
+
 function encodeTritemiusz() {
     let inputText = document.getElementById("inputText").value.toUpperCase();
     let result = "";
     let key = 5; // Przesunięcie dla szyfru Tritemiusza
+    let alphabet = 'AĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ';
     for (let i = 0; i < inputText.length; i++) {
-        let charCode = inputText.charCodeAt(i);
-        if (charCode >= 65 && charCode <= 90) {
-            result += String.fromCharCode((charCode + key - 65) % 26 + 65);
+        let index = alphabet.indexOf(inputText[i]);
+        if (index !== -1) {
+            result += alphabet[modulo((index + key), alphabet.length)];
             key++;
         } else {
             result += inputText[i];
@@ -184,10 +216,11 @@ function decodeTritemiusz() {
     let inputText = document.getElementById("inputText").value.toUpperCase();
     let result = "";
     let key = 5; // Przesunięcie dla szyfru Tritemiusza
+    let alphabet = 'AĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ';
     for (let i = 0; i < inputText.length; i++) {
-        let charCode = inputText.charCodeAt(i);
-        if (charCode >= 65 && charCode <= 90) {
-            result += String.fromCharCode((charCode - key - 65 + 26) % 26 + 65);
+        let index = alphabet.indexOf(inputText[i]);
+        if (index !== -1) {
+            result += alphabet[modulo((index - key + alphabet.length), alphabet.length)];
             key++;
         } else {
             result += inputText[i];
@@ -195,6 +228,7 @@ function decodeTritemiusz() {
     }
     document.getElementById("outputText").value = result;
 }
+
 
 //SZYFR VIGENER
 function encodeVigener() {
