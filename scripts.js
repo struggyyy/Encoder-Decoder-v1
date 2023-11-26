@@ -1,4 +1,4 @@
-//SZYFR CEZARA
+//SZYFR CEZAR
 const alfabet = 'aąbcćdeęfghijklłmnńoóprsśtuwyzźżAĄBCĆDEĘFGHIJKLŁMNŃOÓPRSŚTUWYZŹŻ';
 
 function modulo(a, b) {
@@ -37,7 +37,7 @@ function decodeCezar() {
     document.getElementById('outputText').value = odszyfrowanyTekst;
 }
 
-//SZYFR POLIBIUSZA
+//SZYFR POLIBIUSZ
 function encodePolibiusz() {
     let inputText = document.getElementById("inputText").value.toUpperCase();
     let polibiuszMap = {
@@ -80,7 +80,7 @@ function decodePolibiusz() {
         if (polibiuszMap[pair]) {
             result += polibiuszMap[pair];
         } else if (pair.trim() !== '') {
-            result += pair;  // If not found in the map, add the original pair
+            result += pair; 
         }
     }
     document.getElementById("outputText").value = result;
@@ -190,8 +190,6 @@ function decodeHomofoniczny() {
     document.getElementById("outputText").value = result;
 }
 
-
-
 //SZYFR TRITEMIUSZ
 function modulo(n, m) {
     return ((n % m) + m) % m;
@@ -200,7 +198,7 @@ function modulo(n, m) {
 function encodeTritemiusz() {
     let inputText = document.getElementById("inputText").value.toUpperCase();
     let result = "";
-    let key = 5; // Przesunięcie dla szyfru Tritemiusza
+    let key = 5;
     let alphabet = 'AĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ';
     for (let i = 0; i < inputText.length; i++) {
         let index = alphabet.indexOf(inputText[i]);
@@ -217,7 +215,7 @@ function encodeTritemiusz() {
 function decodeTritemiusz() {
     let inputText = document.getElementById("inputText").value.toUpperCase();
     let result = "";
-    let key = 5; // Przesunięcie dla szyfru Tritemiusza
+    let key = 5;
     let alphabet = 'AĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ';
     for (let i = 0; i < inputText.length; i++) {
         let index = alphabet.indexOf(inputText[i]);
@@ -231,7 +229,6 @@ function decodeTritemiusz() {
     document.getElementById("outputText").value = result;
 }
 
-
 //SZYFR VIGENER
 function encodeVigener() {
     let inputText = document.getElementById("inputText").value;
@@ -242,16 +239,16 @@ function encodeVigener() {
     }
     let result = "";
     let keyIndex = 0;
+    let alphabet = 'AĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ';
 
     for (let i = 0; i < inputText.length; i++) {
-        let charCode = inputText.charCodeAt(i);
-
-        if (charCode >= 65 && charCode <= 90) { // Uppercase letters
-            result += String.fromCharCode((charCode - 65 + key.charCodeAt(keyIndex) - 65) % 26 + 65);
-            keyIndex = (keyIndex + 1) % key.length;
-        } else if (charCode >= 97 && charCode <= 122) { // Lowercase letters
-            result += String.fromCharCode((charCode - 97 + key.charCodeAt(keyIndex) - 97) % 26 + 97);
-            keyIndex = (keyIndex + 1) % key.length;
+        let char = inputText[i].toUpperCase();
+        let charIndex = alphabet.indexOf(char);
+        if (charIndex !== -1) {
+            let keyChar = key[keyIndex % key.length];
+            let keyCharIndex = alphabet.indexOf(keyChar);
+            result += alphabet[(charIndex + keyCharIndex) % alphabet.length];
+            keyIndex++;
         } else {
             result += inputText[i];
         }
@@ -268,16 +265,16 @@ function decodeVigener() {
     }
     let result = "";
     let keyIndex = 0;
+    let alphabet = 'AĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ';
 
     for (let i = 0; i < inputText.length; i++) {
-        let charCode = inputText.charCodeAt(i);
-
-        if (charCode >= 65 && charCode <= 90) { // Uppercase letters
-            result += String.fromCharCode((charCode - 65 - (key.charCodeAt(keyIndex) - 65) + 26) % 26 + 65);
-            keyIndex = (keyIndex + 1) % key.length;
-        } else if (charCode >= 97 && charCode <= 122) { // Lowercase letters
-            result += String.fromCharCode((charCode - 97 - (key.charCodeAt(keyIndex) - 97) + 26) % 26 + 97);
-            keyIndex = (keyIndex + 1) % key.length;
+        let char = inputText[i].toUpperCase();
+        let charIndex = alphabet.indexOf(char);
+        if (charIndex !== -1) {
+            let keyChar = key[keyIndex % key.length];
+            let keyCharIndex = alphabet.indexOf(keyChar);
+            result += alphabet[(charIndex - keyCharIndex + alphabet.length) % alphabet.length];
+            keyIndex++;
         } else {
             result += inputText[i];
         }
@@ -285,20 +282,19 @@ function decodeVigener() {
     document.getElementById("outputText").value = result;
 }
 
-//SZYFR PLAYFAIRA
-// Funkcja pomocnicza do generowania macierzy Playfaira
+//SZYFR PLAYFAIR
 function generatePlayfairMatrix(key) {
-    let alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
-    let keyWithoutJ = key.replace(/J/g, "I");
+    let alphabet = "AĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ";
+    let keyWithoutJ = key.replace(/J/g, "I").replace(/j/g, "i");
     let keySet = new Set(keyWithoutJ);
     let remainingLetters = alphabet.split("").filter(letter => !keySet.has(letter));
 
     let matrix = [];
     let keyIndex = 0;
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 6; i++) {
         let row = [];
-        for (let j = 0; j < 5; j++) {
+        for (let j = 0; j < 6; j++) {
             if (keyIndex < keyWithoutJ.length) {
                 row.push(keyWithoutJ[keyIndex]);
                 keyIndex++;
@@ -314,7 +310,7 @@ function generatePlayfairMatrix(key) {
 
 function encodePlayfair() {
     let inputText = document.getElementById("inputText").value.toUpperCase();
-    let key = document.getElementById("playfairKey").value.toUpperCase().replace(/J/g, "I");
+    let key = document.getElementById("playfairKey").value.toUpperCase().replace(/J/g, "I").replace(/j/g, "i");
 
     if (key.length === 0) {
         alert("Wprowadź klucz Playfaira.");
@@ -324,59 +320,22 @@ function encodePlayfair() {
     let matrix = generatePlayfairMatrix(key);
     let result = "";
 
-    // Implementuj szyfrację Playfaira
     for (let i = 0; i < inputText.length; i += 2) {
         let pair = inputText.substring(i, i + 2);
         if (pair.length === 1) {
-            pair += 'Q'; // Dodaj 'Q' dla pojedynczej litery
+            pair += 'Q';
         }
 
-        let [firstLetterRow, firstLetterCol] = findLetterInMatrix(matrix, pair[0]);
-        let [secondLetterRow, secondLetterCol] = findLetterInMatrix(matrix, pair[1]);
+        let [firstLetterRow, firstLetterCol] = findLetterInMatrix(matrix, pair[0]) || [];
+        let [secondLetterRow, secondLetterCol] = findLetterInMatrix(matrix, pair[1]) || [];
 
-        if (firstLetterRow === secondLetterRow) {
-            result += matrix[firstLetterRow][(firstLetterCol + 1) % 5];
-            result += matrix[secondLetterRow][(secondLetterCol + 1) % 5];
-        } else if (firstLetterCol === secondLetterCol) {
-            result += matrix[(firstLetterRow + 1) % 5][firstLetterCol];
-            result += matrix[(secondLetterRow + 1) % 5][secondLetterCol];
-        } else {
-            result += matrix[firstLetterRow][secondLetterCol];
-            result += matrix[secondLetterRow][firstLetterCol];
-        }
-    }
-
-    document.getElementById("outputText").value = result;
-}
-/* //Rozwiązanie ignorujące pary znaków o tej samej wartości lub kolumnie = brak dodawania ostatiej litery
-
-function encodePlayfair() {
-    let inputText = document.getElementById("inputText").value.toUpperCase();
-    let key = document.getElementById("playfairKey").value.toUpperCase().replace(/J/g, "I");
-
-    if (key.length === 0) {
-        alert("Wprowadź klucz Playfaira.");
-        return;
-    }
-
-    let matrix = generatePlayfairMatrix(key);
-    let result = "";
-
-    // Implementuj szyfrację Playfaira
-    for (let i = 0; i < inputText.length; i += 2) {
-        let pair = inputText.substring(i, i + 2);
-        if (pair.length === 1) {
-            pair += 'Q'; // Dodaj 'Q' dla pojedynczej litery
-        }
-
-        let [firstLetterRow, firstLetterCol] = findLetterInMatrix(matrix, pair[0]);
-        let [secondLetterRow, secondLetterCol] = findLetterInMatrix(matrix, pair[1]);
-
-        // Sprawdź, czy pary są takie same lub w tej samej kolumnie
-        if (pair[0] !== pair[1] && firstLetterCol !== secondLetterCol) {
+        if (firstLetterRow !== undefined && secondLetterRow !== undefined) {
             if (firstLetterRow === secondLetterRow) {
-                result += matrix[firstLetterRow][(firstLetterCol + 1) % 5];
-                result += matrix[secondLetterRow][(secondLetterCol + 1) % 5];
+                result += matrix[firstLetterRow][(firstLetterCol + 1) % 6];
+                result += matrix[secondLetterRow][(secondLetterCol + 1) % 6];
+            } else if (firstLetterCol === secondLetterCol) {
+                result += matrix[(firstLetterRow + 1) % 6][firstLetterCol];
+                result += matrix[(secondLetterRow + 1) % 6][secondLetterCol];
             } else {
                 result += matrix[firstLetterRow][secondLetterCol];
                 result += matrix[secondLetterRow][firstLetterCol];
@@ -389,11 +348,11 @@ function encodePlayfair() {
 
     document.getElementById("outputText").value = result;
 }
-*/
+
 
 function decodePlayfair() {
     let inputText = document.getElementById("inputText").value.toUpperCase();
-    let key = document.getElementById("playfairKey").value.toUpperCase().replace(/J/g, "I");
+    let key = document.getElementById("playfairKey").value.toUpperCase().replace(/J/g, "I").replace(/j/g, "i");
 
     if (key.length === 0) {
         alert("Wprowadź klucz Playfaira.");
@@ -403,32 +362,36 @@ function decodePlayfair() {
     let matrix = generatePlayfairMatrix(key);
     let result = "";
 
-    // Implementuj deszyfrację Playfaira
     for (let i = 0; i < inputText.length; i += 2) {
         let pair = inputText.substring(i, i + 2);
         if (pair.length === 1) {
-            pair += 'Q'; // Dodaj 'Q' dla pojedynczej litery
+            pair += 'Q';
         }
 
-        let [firstLetterRow, firstLetterCol] = findLetterInMatrix(matrix, pair[0]);
-        let [secondLetterRow, secondLetterCol] = findLetterInMatrix(matrix, pair[1]);
+        let [firstLetterRow, firstLetterCol] = findLetterInMatrix(matrix, pair[0]) || [];
+        let [secondLetterRow, secondLetterCol] = findLetterInMatrix(matrix, pair[1]) || [];
 
-        if (firstLetterRow === secondLetterRow) {
-            result += matrix[firstLetterRow][(firstLetterCol - 1 + 5) % 5];
-            result += matrix[secondLetterRow][(secondLetterCol - 1 + 5) % 5];
-        } else if (firstLetterCol === secondLetterCol) {
-            result += matrix[(firstLetterRow - 1 + 5) % 5][firstLetterCol];
-            result += matrix[(secondLetterRow - 1 + 5) % 5][secondLetterCol];
+        if (firstLetterRow !== undefined && secondLetterRow !== undefined) {
+            if (firstLetterRow === secondLetterRow) {
+                result += matrix[firstLetterRow][(firstLetterCol - 1 + 6) % 6];
+                result += matrix[secondLetterRow][(secondLetterCol - 1 + 6) % 6];
+            } else if (firstLetterCol === secondLetterCol) {
+                result += matrix[(firstLetterRow - 1 + 6) % 6][firstLetterCol];
+                result += matrix[(secondLetterRow - 1 + 6) % 6][secondLetterCol];
+            } else {
+                result += matrix[firstLetterRow][secondLetterCol];
+                result += matrix[secondLetterRow][firstLetterCol];
+            }
         } else {
-            result += matrix[firstLetterRow][secondLetterCol];
-            result += matrix[secondLetterRow][firstLetterCol];
+            result += pair[0];
+            result += pair[1];
         }
     }
 
     document.getElementById("outputText").value = result;
 }
 
-// Funkcja pomocnicza do znajdowania litery w macierzy Playfaira
+
 function findLetterInMatrix(matrix, letter) {
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
