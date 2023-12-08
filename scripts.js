@@ -190,6 +190,8 @@ function decodeHomofoniczny() {
     document.getElementById("outputText").value = result;
 }
 
+
+
 //SZYFR TRITEMIUSZ
 function modulo(n, m) {
     return ((n % m) + m) % m;
@@ -228,6 +230,7 @@ function decodeTritemiusz() {
     }
     document.getElementById("outputText").value = result;
 }
+
 
 //SZYFR VIGENER
 function encodeVigener() {
@@ -281,6 +284,7 @@ function decodeVigener() {
     }
     document.getElementById("outputText").value = result;
 }
+
 
 //SZYFR PLAYFAIR
 function generatePlayfairMatrix(key) {
