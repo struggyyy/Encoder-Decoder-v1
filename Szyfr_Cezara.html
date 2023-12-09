@@ -8,19 +8,35 @@
 </head>
 <body>
     <div class="container">
-        <button onclick="window.location.href='Home.html'">Zmień Szyfr</button>
-        
-        <h1>Szyfr Cezara</h1>
-        <label for="inputText">Tekst do zakodowania/dekodowania:</label>
-        <textarea id="inputText" placeholder="Wprowadź tekst"></textarea><br>
+        <!-- Encoding Layout -->
+        <div class="encoding">
+            <h1>Szyfr Cezara - Kod</h1>
+            <h2>Kodowanie</h2>
+            <label for="inputTextEncode">Tekst do zakodowania:</label>
+            <textarea id="inputTextEncode" placeholder="Wprowadź tekst"></textarea><br>
 
-        <label for="cezarShift">Przesunięcie:</label>
-        <input type="number" id="cezarShift" placeholder="Wprowadź przesunięcie" />
-        <button onclick="encodeCezar()">Kodowanie</button>
-        <button onclick="decodeCezar()">Dekodowanie</button>
+            <label for="cezarShiftEncode">Przesunięcie:</label>
+            <input type="number" id="cezarShiftEncode" placeholder="Wprowadź przesunięcie" value="3" />
+            <button onclick="encodeCezar()">Kodowanie</button>
 
-        <label for="outputText">Wynik:</label>
-        <textarea id="outputText" placeholder="Wynik"></textarea>
+            <label for="outputTextEncode">Wynik:</label>
+            <textarea id="outputTextEncode" placeholder="Wynik" readonly></textarea>
+        </div>
+
+        <!-- Decoding Layout -->
+        <div class="decoding">
+            <h1>Szyfr Cezara - Dekodowanie</h1>
+            <label for="inputTextDecode">Tekst do dekodowania:</label>
+            <textarea id="inputTextDecode" placeholder="Wprowadź tekst" oninput="autofillDecoding()"></textarea><br>
+
+            <label for="cezarShiftDecode">Przesunięcie:</label>
+            <input type="number" id="cezarShiftDecode" placeholder="Wprowadź przesunięcie" value="3"/>
+            <button onclick="decodeCezar()">Dekodowanie</button>
+
+            <label for="outputTextDecode">Wynik:</label>
+            <textarea id="outputTextDecode" placeholder="Wynik" readonly></textarea>
+        </div>
+
         <script src="scripts.js"></script>
     </div>
 </body>
