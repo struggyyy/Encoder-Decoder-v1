@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Szyfr Polibiusza</title>
+</head>
+<body>
+    <div class="container">
+        <button onclick="window.location.href='Home.html'">Zmień Szyfr</button>
+
+        <h1>Szyfr Polibiusza</h1>
+        <label for="inputText">Tekst do zakodowania/dekodowania:</label>
+        <textarea id="inputText" placeholder="Wprowadź tekst"></textarea><br>
+
+        <button onclick="encodePolibiusz()">Kodowanie</button>
+        <button onclick="decodePolibiusz()">Dekodowanie</button><br>
+
+        <label for="outputText">Wynik:</label>
+        <textarea id="outputText" placeholder="Wynik"></textarea>
+        <script src="scripts.js"></script>
+    </div>
+</body>
+</html>
